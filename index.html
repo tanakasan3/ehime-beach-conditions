@@ -409,7 +409,6 @@
         
         .tide-chart-scroll {
             overflow-x: auto;
-            margin-bottom: 15px;
             padding-bottom: 8px;
             -webkit-overflow-scrolling: touch;
         }
@@ -428,37 +427,42 @@
             border-radius: 3px;
         }
 
-        .tide-chart-container {
-            position: relative;
+        .tide-scroll-content {
             width: 700px;
             min-width: 700px;
+        }
+
+        @media (min-width: 750px) {
+            .tide-scroll-content {
+                width: 100%;
+                min-width: 100%;
+            }
+        }
+
+        .tide-chart-container {
+            position: relative;
+            width: 100%;
             height: 220px;
+            margin-bottom: 15px;
         }
         
         .tide-chart {
             width: 100%;
             height: 100%;
         }
-
-        @media (min-width: 750px) {
-            .tide-chart-container {
-                width: 100%;
-                min-width: 100%;
-            }
-        }
         
         .tide-events {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            display: flex;
             gap: 10px;
-            margin-top: 20px;
         }
         
         .tide-event {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            padding: 12px;
+            padding: 12px 16px;
             text-align: center;
+            flex: 1;
+            min-width: 0;
         }
         
         .tide-event.high {
@@ -737,11 +741,13 @@
                 <button class="refresh-btn" onclick="refreshData()">🔄 更新</button>
             </div>
             <div class="tide-chart-scroll">
-                <div class="tide-chart-container">
-                    <canvas id="tideChart" class="tide-chart"></canvas>
+                <div class="tide-scroll-content">
+                    <div class="tide-chart-container">
+                        <canvas id="tideChart" class="tide-chart"></canvas>
+                    </div>
+                    <div id="tideEvents" class="tide-events"></div>
                 </div>
             </div>
-            <div id="tideEvents" class="tide-events"></div>
         </div>
 
         <div class="terminal-section">
