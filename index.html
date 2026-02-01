@@ -285,6 +285,128 @@
             font-size: 0.7rem;
             font-weight: bold;
         }
+
+        .terminal-section {
+            background: #0d1117;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #161b22;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27ca40; }
+
+        .terminal-title {
+            color: #8b949e;
+            font-size: 0.85rem;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        .terminal-tabs {
+            display: flex;
+            background: #161b22;
+            border-bottom: 1px solid #30363d;
+            overflow-x: auto;
+        }
+
+        .terminal-tab {
+            padding: 10px 16px;
+            color: #8b949e;
+            font-size: 0.8rem;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .terminal-tab:hover {
+            color: #c9d1d9;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .terminal-tab.active {
+            color: #00d9ff;
+            border-bottom-color: #00d9ff;
+        }
+
+        .terminal-body {
+            padding: 16px;
+            max-height: 400px;
+            overflow: auto;
+        }
+
+        .terminal-content {
+            display: none;
+        }
+
+        .terminal-content.active {
+            display: block;
+        }
+
+        .terminal-pre {
+            margin: 0;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: #c9d1d9;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .terminal-url {
+            color: #8b949e;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-url-method {
+            color: #3fb950;
+            font-weight: bold;
+        }
+
+        .terminal-url-path {
+            color: #58a6ff;
+        }
+
+        /* JSON syntax highlighting */
+        .json-key { color: #79c0ff; }
+        .json-string { color: #a5d6ff; }
+        .json-number { color: #ffa657; }
+        .json-boolean { color: #ff7b72; }
+        .json-null { color: #8b949e; }
+        .json-bracket { color: #8b949e; }
     </style>
 </head>
 <body>
@@ -314,6 +436,19 @@
                 <canvas id="tideChart" class="tide-chart"></canvas>
             </div>
             <div id="tideEvents" class="tide-events"></div>
+        </div>
+
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                </div>
+                <span class="terminal-title">API Response</span>
+            </div>
+            <div class="terminal-tabs" id="terminalTabs"></div>
+            <div class="terminal-body" id="terminalBody"></div>
         </div>
 
         <footer>
@@ -348,6 +483,9 @@
         // Matsuyama coordinates for tide data
         const matsuyama = { lat: 33.8392, lon: 132.7656 };
 
+        // Store API responses for terminal display
+        const apiResponses = {};
+
         // Convert degrees to cardinal direction
         function degreesToCardinal(deg) {
             if (deg === null || deg === undefined) return '-';
@@ -381,18 +519,98 @@
             return date.toLocaleString('ja-JP', { month: 'short', day: 'numeric' });
         }
 
+        // JSON syntax highlighting
+        function syntaxHighlight(json) {
+            if (typeof json !== 'string') {
+                json = JSON.stringify(json, null, 2);
+            }
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'json-number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                        match = match.slice(0, -1) + '</span><span class="json-bracket">:</span>';
+                        return '<span class="' + cls + '">' + match;
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            }).replace(/([{}\[\]])/g, '<span class="json-bracket">$1</span>');
+        }
+
+        // Render terminal tabs and content
+        function renderTerminal() {
+            const tabsContainer = document.getElementById('terminalTabs');
+            const bodyContainer = document.getElementById('terminalBody');
+            
+            const entries = Object.entries(apiResponses);
+            if (entries.length === 0) {
+                tabsContainer.innerHTML = '';
+                bodyContainer.innerHTML = '<p style="color: #8b949e; font-family: monospace;">Waiting for API responses...</p>';
+                return;
+            }
+            
+            // Render tabs
+            tabsContainer.innerHTML = entries.map(([key, data], index) => 
+                `<button class="terminal-tab ${index === 0 ? 'active' : ''}" onclick="switchTab('${key}')">${data.label}</button>`
+            ).join('');
+            
+            // Render content
+            bodyContainer.innerHTML = entries.map(([key, data], index) => `
+                <div class="terminal-content ${index === 0 ? 'active' : ''}" id="terminal-${key}">
+                    <div class="terminal-url">
+                        <span class="terminal-url-method">GET</span>
+                        <span class="terminal-url-path">${data.url}</span>
+                    </div>
+                    <pre class="terminal-pre">${syntaxHighlight(data.response)}</pre>
+                </div>
+            `).join('');
+        }
+
+        // Switch terminal tab
+        function switchTab(key) {
+            document.querySelectorAll('.terminal-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.terminal-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`terminal-${key}`).classList.add('active');
+        }
+
         // Fetch weather data from Open-Meteo
-        async function fetchWeatherData(lat, lon) {
+        async function fetchWeatherData(lat, lon, beachName) {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Asia/Tokyo`;
             const response = await fetch(url);
-            return response.json();
+            const data = await response.json();
+            
+            // Store for terminal
+            apiResponses[`weather-${beachName}`] = {
+                label: `🌤 ${beachName}`,
+                url: url,
+                response: data
+            };
+            
+            return data;
         }
 
         // Fetch marine/tide data from Open-Meteo
         async function fetchTideData(lat, lon) {
             const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height&timezone=Asia/Tokyo&forecast_hours=48`;
             const response = await fetch(url);
-            return response.json();
+            const data = await response.json();
+            
+            // Store for terminal
+            apiResponses['tide-matsuyama'] = {
+                label: '🌊 Tide',
+                url: url,
+                response: data
+            };
+            
+            return data;
         }
 
         // Find high and low tides from hourly data
@@ -663,10 +881,13 @@
             `;
 
             try {
+                // Clear previous API responses
+                Object.keys(apiResponses).forEach(key => delete apiResponses[key]);
+
                 // Fetch beach wind data
                 const beachResults = await Promise.all(
                     beaches.map(async (beach) => {
-                        const weather = await fetchWeatherData(beach.lat, beach.lon);
+                        const weather = await fetchWeatherData(beach.lat, beach.lon, beach.name);
                         return { beach, weather };
                     })
                 );
@@ -682,6 +903,9 @@
                     drawTideChart(tideData.hourly.time, tideData.hourly.sea_level_height);
                     renderTideEvents(tideData.hourly.time, tideData.hourly.sea_level_height);
                 }
+
+                // Render terminal with API responses
+                renderTerminal();
 
                 lastUpdated.textContent = `最終更新: ${formatTime(new Date())}`;
             } catch (error) {
