@@ -80,165 +80,163 @@
             font-size: 1.1rem;
         }
 
-        .beaches {
+        /* Matrix Layout */
+        .forecast-matrix {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
+            grid-template-columns: auto repeat(5, 1fr);
+            gap: 8px;
             margin-bottom: 30px;
         }
 
-        @media (max-width: 1000px) {
-            .beaches {
-                grid-template-columns: repeat(3, 1fr);
+        @media (max-width: 900px) {
+            .forecast-matrix {
+                grid-template-columns: auto repeat(3, 1fr);
+            }
+            .forecast-matrix .beach-header:nth-child(n+5),
+            .forecast-matrix .day-cell:nth-child(6n+5),
+            .forecast-matrix .day-cell:nth-child(6n+6) {
+                display: none;
             }
         }
 
         @media (max-width: 600px) {
-            .beaches {
-                grid-template-columns: repeat(2, 1fr);
+            .forecast-matrix {
+                grid-template-columns: auto repeat(2, 1fr);
+            }
+            .forecast-matrix .beach-header:nth-child(n+4),
+            .forecast-matrix .day-cell:nth-child(6n+4),
+            .forecast-matrix .day-cell:nth-child(6n+5),
+            .forecast-matrix .day-cell:nth-child(6n+6) {
+                display: none;
             }
         }
-        
-        .beach-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 15px 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        .day-label {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px 10px;
             text-align: center;
-            cursor: pointer;
-        }
-        
-        .beach-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .beach-card.expanded {
-            grid-column: 1 / -1;
-            cursor: default;
-        }
-        
-        .beach-name {
-            font-size: 1.15rem;
+        .day-label-date {
+            font-size: 0.9rem;
+            font-weight: bold;
             color: #fff;
-            margin-bottom: 2px;
         }
-        
-        .beach-name-en {
-            color: #666;
+
+        .day-label-weekday {
             font-size: 0.75rem;
-            margin-bottom: 12px;
-        }
-
-        .day-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            justify-content: center;
-        }
-
-        .day-tab {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 6px 10px;
-            color: #888;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .day-tab:hover {
-            background: rgba(0, 217, 255, 0.1);
-            color: #00d9ff;
-        }
-
-        .day-tab.active {
-            background: rgba(0, 217, 255, 0.2);
-            border-color: rgba(0, 217, 255, 0.4);
-            color: #00d9ff;
-        }
-
-        .day-tab-date {
-            display: block;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .day-tab-day {
-            display: block;
-            font-size: 0.65rem;
-            opacity: 0.7;
-        }
-        
-        .wind-display {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        
-        .wind-arrow {
-            font-size: 2rem;
-            color: #00d9ff;
-            transition: transform 0.5s ease;
-            text-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
-        }
-        
-        .wind-info {
-            text-align: left;
-        }
-        
-        .wind-speed {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #fff;
-        }
-        
-        .wind-speed-unit {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        
-        .wind-cardinal {
-            color: #00d9ff;
-            font-size: 0.95rem;
-            font-weight: 500;
-        }
-
-        .wind-range {
-            font-size: 0.7rem;
             color: #666;
+        }
+
+        .day-label-time {
+            font-size: 0.6rem;
+            color: #555;
             margin-top: 2px;
         }
 
-        .daytime-label {
+        .beach-header {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        .beach-header-name {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .beach-header-en {
             font-size: 0.65rem;
+            color: #666;
+        }
+
+        .corner-cell {
+            background: transparent;
+        }
+
+        .day-cell {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .day-cell:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .day-cell.selected {
+            background: rgba(0, 217, 255, 0.2);
+            border-color: rgba(0, 217, 255, 0.5);
+        }
+
+        .cell-wind-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .cell-wind-arrow {
+            font-size: 1.5rem;
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.4);
+        }
+
+        .cell-wind-info {
+            text-align: left;
+        }
+
+        .cell-wind-speed {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .cell-wind-unit {
+            font-size: 0.7rem;
+            color: #888;
+        }
+
+        .cell-wind-cardinal {
+            font-size: 0.8rem;
+            color: #00d9ff;
+        }
+
+        .cell-wind-range {
+            font-size: 0.6rem;
             color: #555;
-            margin-top: 8px;
         }
 
-        .click-hint {
-            font-size: 0.65rem;
+        .cell-hint {
+            font-size: 0.55rem;
             color: #444;
-            margin-top: 8px;
-        }
-
-        .beach-card:not(.expanded) .click-hint::after {
-            content: "タップで詳細";
+            margin-top: 6px;
         }
 
         /* Expanded hourly view */
-        .hourly-detail {
+        .hourly-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 217, 255, 0.3);
             display: none;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .beach-card.expanded .hourly-detail {
+        .hourly-panel.visible {
             display: block;
         }
 
@@ -247,21 +245,28 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .hourly-title {
-            font-size: 1rem;
+            font-size: 1.2rem;
             color: #fff;
+        }
+
+        .hourly-subtitle {
+            font-size: 0.85rem;
+            color: #888;
         }
 
         .close-btn {
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #888;
-            padding: 5px 12px;
-            border-radius: 15px;
+            padding: 8px 16px;
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             transition: all 0.2s ease;
         }
 
@@ -272,9 +277,20 @@
 
         .hourly-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-            gap: 8px;
-            max-width: 100%;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 6px;
+        }
+
+        @media (max-width: 800px) {
+            .hourly-grid {
+                grid-template-columns: repeat(8, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .hourly-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
         }
 
         .hour-item {
@@ -285,8 +301,8 @@
         }
 
         .hour-item.daytime {
-            background: rgba(0, 217, 255, 0.1);
-            border: 1px solid rgba(0, 217, 255, 0.2);
+            background: rgba(0, 217, 255, 0.15);
+            border: 1px solid rgba(0, 217, 255, 0.25);
         }
 
         .hour-time {
@@ -296,14 +312,14 @@
         }
 
         .hour-arrow {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #00d9ff;
             display: block;
             margin-bottom: 2px;
         }
 
         .hour-speed {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: bold;
             color: #fff;
         }
@@ -613,11 +629,22 @@
             </a>
         </div>
 
-        <div id="beaches" class="beaches">
+        <div id="forecastMatrix" class="forecast-matrix">
             <div class="loading" style="grid-column: 1 / -1;">
                 <div class="loading-spinner"></div>
                 <p>データを取得中...</p>
             </div>
+        </div>
+
+        <div id="hourlyPanel" class="hourly-panel">
+            <div class="hourly-header">
+                <div>
+                    <h3 class="hourly-title" id="hourlyTitle">-</h3>
+                    <p class="hourly-subtitle" id="hourlySubtitle">24時間の風データ</p>
+                </div>
+                <button class="close-btn" onclick="closeHourlyPanel()">✕ 閉じる</button>
+            </div>
+            <div class="hourly-grid" id="hourlyGrid"></div>
         </div>
 
         <div class="tide-section">
@@ -656,89 +683,42 @@
     <script>
         // Beach locations in Ehime Prefecture
         const beaches = [
-            {
-                name: '塩屋海岸',
-                nameEn: 'Shioya Beach',
-                lat: 33.799102,
-                lon: 132.690173,
-            },
-            {
-                name: '堀江',
-                nameEn: 'Horie Beach',
-                lat: 33.905024,
-                lon: 132.739466,
-            },
-            {
-                name: '別府',
-                nameEn: 'Beppu Beach',
-                lat: 34.067622,
-                lon: 132.899053,
-            },
-            {
-                name: '織田ヶ浜',
-                nameEn: 'Odagahama Beach',
-                lat: 34.042646,
-                lon: 133.033807,
-            },
-            {
-                name: 'モンチッチ',
-                nameEn: 'Monchicchi',
-                lat: 33.984441,
-                lon: 132.771392,
-            }
+            { name: '塩屋海岸', nameEn: 'Shioya Beach', lat: 33.799102, lon: 132.690173 },
+            { name: '堀江', nameEn: 'Horie Beach', lat: 33.905024, lon: 132.739466 },
+            { name: '別府', nameEn: 'Beppu Beach', lat: 34.067622, lon: 132.899053 },
+            { name: '織田ヶ浜', nameEn: 'Odagahama Beach', lat: 34.042646, lon: 133.033807 },
+            { name: 'モンチッチ', nameEn: 'Monchicchi', lat: 33.984441, lon: 132.771392 }
         ];
 
-        // Matsuyama coordinates for tide data
         const matsuyama = { lat: 33.8392, lon: 132.7656 };
-
-        // Store API responses for terminal display
         const apiResponses = {};
-
-        // Store beach data for expanded view
         const beachData = {};
+        let selectedCell = null;
 
-        // Currently expanded beach
-        let expandedBeach = null;
-
-        // Selected day index per beach
-        const selectedDays = {};
-
-        // Convert degrees to cardinal direction
         function degreesToCardinal(deg) {
             if (deg === null || deg === undefined) return '-';
             const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 
                               'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-            const index = Math.round(deg / 22.5) % 16;
-            return directions[index];
+            return directions[Math.round(deg / 22.5) % 16];
         }
 
-        // Format time for display
         function formatTime(date) {
             return date.toLocaleString('ja-JP', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZoneName: 'short'
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
             });
         }
 
-        // Get day label
         function getDayLabel(dateStr, index) {
             const date = new Date(dateStr);
             const days = ['日', '月', '火', '水', '木', '金', '土'];
             const dayName = days[date.getDay()];
             
-            if (index === 0) return { date: '今日', day: dayName };
-            if (index === 1) return { date: '明日', day: dayName };
-            return { 
-                date: `${date.getMonth() + 1}/${date.getDate()}`, 
-                day: dayName 
-            };
+            if (index === 0) return { date: '今日', day: dayName, full: dateStr };
+            if (index === 1) return { date: '明日', day: dayName, full: dateStr };
+            return { date: `${date.getMonth() + 1}/${date.getDate()}`, day: dayName, full: dateStr };
         }
 
-        // Get daytime hours (9am-5pm) for a specific date
         function getDaytimeData(hourlyData, dateStr) {
             const targetDate = dateStr.split('T')[0];
             const daytimeHours = [];
@@ -749,8 +729,7 @@
                     const hour = parseInt(time.split('T')[1].split(':')[0]);
                     if (hour >= 9 && hour <= 17) {
                         daytimeHours.push({
-                            time: time,
-                            hour: hour,
+                            time, hour,
                             windSpeed: hourlyData.wind_speed_10m[i],
                             windDir: hourlyData.wind_direction_10m[i]
                         });
@@ -760,7 +739,6 @@
             return daytimeHours;
         }
 
-        // Get all hours for a specific date
         function getAllHoursData(hourlyData, dateStr) {
             const targetDate = dateStr.split('T')[0];
             const hours = [];
@@ -770,8 +748,7 @@
                 if (time.startsWith(targetDate)) {
                     const hour = parseInt(time.split('T')[1].split(':')[0]);
                     hours.push({
-                        time: time,
-                        hour: hour,
+                        time, hour,
                         windSpeed: hourlyData.wind_speed_10m[i],
                         windDir: hourlyData.wind_direction_10m[i],
                         isDaytime: hour >= 9 && hour <= 17
@@ -781,7 +758,6 @@
             return hours;
         }
 
-        // Summarize wind data for daytime
         function summarizeDaytime(daytimeData) {
             if (daytimeData.length === 0) return null;
             
@@ -790,35 +766,29 @@
             
             if (speeds.length === 0) return null;
             
-            // Calculate average direction using circular mean
             let sinSum = 0, cosSum = 0;
             dirs.forEach(d => {
                 sinSum += Math.sin(d * Math.PI / 180);
                 cosSum += Math.cos(d * Math.PI / 180);
             });
-            const avgDir = Math.atan2(sinSum / dirs.length, cosSum / dirs.length) * 180 / Math.PI;
-            const normalizedDir = (avgDir + 360) % 360;
+            const avgDir = ((Math.atan2(sinSum / dirs.length, cosSum / dirs.length) * 180 / Math.PI) + 360) % 360;
             
             return {
                 avgSpeed: speeds.reduce((a, b) => a + b, 0) / speeds.length,
                 minSpeed: Math.min(...speeds),
                 maxSpeed: Math.max(...speeds),
-                avgDir: normalizedDir
+                avgDir
             };
         }
 
-        // Get unique dates from hourly data
         function getUniqueDates(hourlyData) {
             const dates = new Set();
             hourlyData.time.forEach(t => dates.add(t.split('T')[0]));
-            return Array.from(dates).slice(0, 3); // First 3 days
+            return Array.from(dates).slice(0, 3);
         }
 
-        // JSON syntax highlighting
         function syntaxHighlight(json) {
-            if (typeof json !== 'string') {
-                json = JSON.stringify(json, null, 2);
-            }
+            if (typeof json !== 'string') json = JSON.stringify(json, null, 2);
             return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
                 let cls = 'json-number';
                 if (/^"/.test(match)) {
@@ -838,7 +808,6 @@
             }).replace(/([{}\[\]])/g, '<span class="json-bracket">$1</span>');
         }
 
-        // Render terminal tabs and content
         function renderTerminal() {
             const tabsContainer = document.getElementById('terminalTabs');
             const bodyContainer = document.getElementById('terminalBody');
@@ -868,179 +837,158 @@
         function switchTab(key) {
             document.querySelectorAll('.terminal-tab').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.terminal-content').forEach(content => content.classList.remove('active'));
-            
             event.target.classList.add('active');
             document.getElementById(`terminal-${key}`).classList.add('active');
         }
 
-        // Fetch weather data with hourly forecast
         async function fetchWeatherData(lat, lon, beachName) {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Asia/Tokyo&forecast_days=3`;
             const response = await fetch(url);
             const data = await response.json();
             
-            apiResponses[`weather-${beachName}`] = {
-                label: `🌤 ${beachName}`,
-                url: url,
-                response: data
-            };
-            
+            apiResponses[`weather-${beachName}`] = { label: `🌤 ${beachName}`, url, response: data };
             return data;
         }
 
-        // Fetch marine/tide data
         async function fetchTideData(lat, lon) {
             const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height_msl&timezone=Asia/Tokyo&forecast_hours=48`;
             const response = await fetch(url);
             const data = await response.json();
             
-            apiResponses['tide-matsuyama'] = {
-                label: '🌊 Tide',
-                url: url,
-                response: data
-            };
-            
+            apiResponses['tide-matsuyama'] = { label: '🌊 Tide', url, response: data };
             return data;
         }
 
-        // Render beach card
-        function renderBeachCard(beach, weatherData) {
-            const beachKey = beach.name;
-            const dates = getUniqueDates(weatherData.hourly);
-            const selectedDay = selectedDays[beachKey] || 0;
-            const currentDate = dates[selectedDay];
+        function renderMatrix() {
+            const container = document.getElementById('forecastMatrix');
+            const dates = beachData[beaches[0].name]?.dates || [];
             
-            // Store data for expanded view
-            beachData[beachKey] = { beach, weatherData, dates };
-            
-            const daytimeData = getDaytimeData(weatherData.hourly, currentDate + 'T00:00');
-            const summary = summarizeDaytime(daytimeData);
-            
-            const isExpanded = expandedBeach === beachKey;
-            
-            let windDisplay = '-';
-            let windDir = 0;
-            let windCardinal = '-';
-            let windRange = '';
-            
-            if (summary) {
-                windDisplay = summary.avgSpeed.toFixed(1);
-                windDir = summary.avgDir;
-                windCardinal = degreesToCardinal(summary.avgDir);
-                windRange = `${summary.minSpeed.toFixed(1)}-${summary.maxSpeed.toFixed(1)}`;
+            if (dates.length === 0) {
+                container.innerHTML = '<div class="error" style="grid-column: 1/-1;">No data available</div>';
+                return;
             }
+
+            let html = '';
             
-            // Day tabs HTML
-            const dayTabsHtml = dates.map((date, idx) => {
-                const label = getDayLabel(date, idx);
-                return `
-                    <div class="day-tab ${idx === selectedDay ? 'active' : ''}" 
-                         onclick="event.stopPropagation(); selectDay('${beachKey}', ${idx})">
-                        <span class="day-tab-date">${label.date}</span>
-                        <span class="day-tab-day">${label.day}</span>
+            // Header row: corner + beach names
+            html += '<div class="day-label corner-cell"></div>';
+            beaches.forEach(beach => {
+                html += `
+                    <div class="beach-header">
+                        <div class="beach-header-name">${beach.name}</div>
+                        <div class="beach-header-en">${beach.nameEn}</div>
                     </div>
                 `;
-            }).join('');
+            });
             
-            // Hourly detail HTML (shown when expanded)
-            let hourlyHtml = '';
-            if (isExpanded) {
-                const allHours = getAllHoursData(weatherData.hourly, currentDate + 'T00:00');
-                hourlyHtml = `
-                    <div class="hourly-detail">
-                        <div class="hourly-header">
-                            <span class="hourly-title">⏰ 時間別データ (${getDayLabel(currentDate, selectedDay).date})</span>
-                            <button class="close-btn" onclick="event.stopPropagation(); collapseBeach()">✕ 閉じる</button>
-                        </div>
-                        <div class="hourly-grid">
-                            ${allHours.map(h => `
-                                <div class="hour-item ${h.isDaytime ? 'daytime' : ''}">
-                                    <div class="hour-time">${h.hour}:00</div>
-                                    <span class="hour-arrow" style="transform: rotate(${h.windDir || 0}deg)">↓</span>
-                                    <div class="hour-speed">${h.windSpeed !== null ? h.windSpeed.toFixed(1) : '-'}</div>
-                                    <div class="hour-cardinal">${degreesToCardinal(h.windDir)}</div>
+            // Data rows: day label + cells
+            dates.forEach((date, dayIndex) => {
+                const label = getDayLabel(date, dayIndex);
+                
+                html += `
+                    <div class="day-label">
+                        <span class="day-label-date">${label.date}</span>
+                        <span class="day-label-weekday">${label.day}曜日</span>
+                        <span class="day-label-time">9:00-17:00</span>
+                    </div>
+                `;
+                
+                beaches.forEach(beach => {
+                    const data = beachData[beach.name];
+                    if (!data) {
+                        html += '<div class="day-cell">-</div>';
+                        return;
+                    }
+                    
+                    const daytimeData = getDaytimeData(data.weatherData.hourly, date + 'T00:00');
+                    const summary = summarizeDaytime(daytimeData);
+                    
+                    const cellKey = `${beach.name}-${dayIndex}`;
+                    const isSelected = selectedCell === cellKey;
+                    
+                    if (summary) {
+                        html += `
+                            <div class="day-cell ${isSelected ? 'selected' : ''}" onclick="selectCell('${beach.name}', ${dayIndex}, '${date}')">
+                                <div class="cell-wind-display">
+                                    <div class="cell-wind-arrow" style="transform: rotate(${summary.avgDir}deg)">↓</div>
+                                    <div class="cell-wind-info">
+                                        <div class="cell-wind-speed">${summary.avgSpeed.toFixed(1)}<span class="cell-wind-unit">m/s</span></div>
+                                        <div class="cell-wind-cardinal">${degreesToCardinal(summary.avgDir)}</div>
+                                    </div>
                                 </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+                                <div class="cell-wind-range">${summary.minSpeed.toFixed(1)}-${summary.maxSpeed.toFixed(1)} m/s</div>
+                                <div class="cell-hint">タップで詳細</div>
+                            </div>
+                        `;
+                    } else {
+                        html += '<div class="day-cell">-</div>';
+                    }
+                });
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function selectCell(beachName, dayIndex, dateStr) {
+            const cellKey = `${beachName}-${dayIndex}`;
+            
+            if (selectedCell === cellKey) {
+                closeHourlyPanel();
+                return;
             }
             
-            return `
-                <div class="beach-card ${isExpanded ? 'expanded' : ''}" 
-                     onclick="${isExpanded ? '' : `expandBeach('${beachKey}')`}">
-                    <h2 class="beach-name">${beach.name}</h2>
-                    <p class="beach-name-en">${beach.nameEn}</p>
-                    
-                    <div class="day-tabs">
-                        ${dayTabsHtml}
-                    </div>
-                    
-                    <div class="wind-display">
-                        <div class="wind-arrow" style="transform: rotate(${windDir}deg)">↓</div>
-                        <div class="wind-info">
-                            <div class="wind-speed">${windDisplay}<span class="wind-speed-unit"> m/s</span></div>
-                            <div class="wind-cardinal">${windCardinal}</div>
-                            <div class="wind-range">${windRange} m/s</div>
-                        </div>
-                    </div>
-                    <div class="daytime-label">9:00-17:00 平均</div>
-                    <div class="click-hint"></div>
-                    ${hourlyHtml}
+            selectedCell = cellKey;
+            renderMatrix();
+            showHourlyPanel(beachName, dayIndex, dateStr);
+        }
+
+        function showHourlyPanel(beachName, dayIndex, dateStr) {
+            const panel = document.getElementById('hourlyPanel');
+            const title = document.getElementById('hourlyTitle');
+            const subtitle = document.getElementById('hourlySubtitle');
+            const grid = document.getElementById('hourlyGrid');
+            
+            const data = beachData[beachName];
+            if (!data) return;
+            
+            const label = getDayLabel(dateStr, dayIndex);
+            const allHours = getAllHoursData(data.weatherData.hourly, dateStr + 'T00:00');
+            
+            title.textContent = `${beachName} - ${label.date} (${label.day})`;
+            subtitle.textContent = '24時間の風データ • ハイライト = 9:00-17:00';
+            
+            grid.innerHTML = allHours.map(h => `
+                <div class="hour-item ${h.isDaytime ? 'daytime' : ''}">
+                    <div class="hour-time">${h.hour}:00</div>
+                    <span class="hour-arrow" style="transform: rotate(${h.windDir || 0}deg)">↓</span>
+                    <div class="hour-speed">${h.windSpeed !== null ? h.windSpeed.toFixed(1) : '-'}</div>
+                    <div class="hour-cardinal">${degreesToCardinal(h.windDir)}</div>
                 </div>
-            `;
+            `).join('');
+            
+            panel.classList.add('visible');
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Select day for a beach
-        function selectDay(beachKey, dayIndex) {
-            selectedDays[beachKey] = dayIndex;
-            renderBeaches();
+        function closeHourlyPanel() {
+            selectedCell = null;
+            document.getElementById('hourlyPanel').classList.remove('visible');
+            renderMatrix();
         }
 
-        // Expand beach to show hourly data
-        function expandBeach(beachKey) {
-            expandedBeach = beachKey;
-            renderBeaches();
-        }
-
-        // Collapse expanded beach
-        function collapseBeach() {
-            expandedBeach = null;
-            renderBeaches();
-        }
-
-        // Render all beaches
-        function renderBeaches() {
-            const container = document.getElementById('beaches');
-            container.innerHTML = beaches.map(beach => {
-                const data = beachData[beach.name];
-                if (data) {
-                    return renderBeachCard(data.beach, data.weatherData);
-                }
-                return '';
-            }).join('');
-        }
-
-        // Find high and low tides from hourly data
         function findTideEvents(times, heights) {
             const events = [];
             for (let i = 1; i < heights.length - 1; i++) {
                 if (heights[i] === null) continue;
-                const prev = heights[i - 1];
-                const curr = heights[i];
-                const next = heights[i + 1];
+                const prev = heights[i - 1], curr = heights[i], next = heights[i + 1];
                 if (prev === null || next === null) continue;
                 
-                if (curr > prev && curr > next) {
-                    events.push({ type: 'high', time: times[i], height: curr });
-                } else if (curr < prev && curr < next) {
-                    events.push({ type: 'low', time: times[i], height: curr });
-                }
+                if (curr > prev && curr > next) events.push({ type: 'high', time: times[i], height: curr });
+                else if (curr < prev && curr < next) events.push({ type: 'low', time: times[i], height: curr });
             }
             return events;
         }
 
-        // Draw tide chart
         function drawTideChart(times, heights) {
             const canvas = document.getElementById('tideChart');
             const ctx = canvas.getContext('2d');
@@ -1050,15 +998,12 @@
             canvas.height = rect.height * window.devicePixelRatio;
             ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
             
-            const width = rect.width;
-            const height = rect.height;
+            const width = rect.width, height = rect.height;
             const padding = { top: 30, right: 20, bottom: 40, left: 50 };
             const chartWidth = width - padding.left - padding.right;
             const chartHeight = height - padding.top - padding.bottom;
             
-            const validData = heights.map((h, i) => ({ height: h, time: times[i], index: i }))
-                                    .filter(d => d.height !== null);
-            
+            const validData = heights.map((h, i) => ({ height: h, time: times[i], index: i })).filter(d => d.height !== null);
             if (validData.length === 0) return;
             
             const minHeight = Math.min(...validData.map(d => d.height));
@@ -1100,17 +1045,15 @@
                 ctx.stroke();
                 
                 ctx.fillStyle = '#666';
-                const timeStr = date.toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
-                ctx.fillText(timeStr, x, height - padding.bottom + 15);
+                ctx.fillText(date.toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false }), x, height - padding.bottom + 15);
                 
                 if (hour === 0) {
-                    const dateStr = date.toLocaleString('ja-JP', { month: 'short', day: 'numeric' });
-                    ctx.fillText(dateStr, x, height - padding.bottom + 28);
+                    ctx.fillText(date.toLocaleString('ja-JP', { month: 'short', day: 'numeric' }), x, height - padding.bottom + 28);
                 }
             }
             
             if (minHeight < 0 && maxHeight > 0) {
-                const zeroY = padding.top + ((maxHeight - 0) / heightRange) * chartHeight;
+                const zeroY = padding.top + (maxHeight / heightRange) * chartHeight;
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
                 ctx.setLineDash([5, 5]);
                 ctx.beginPath();
@@ -1127,16 +1070,10 @@
             ctx.beginPath();
             
             let started = false;
-            validData.forEach((d) => {
+            validData.forEach(d => {
                 const x = padding.left + (d.index / (times.length - 1)) * chartWidth;
                 const y = padding.top + ((maxHeight - d.height) / heightRange) * chartHeight;
-                
-                if (!started) {
-                    ctx.moveTo(x, y);
-                    started = true;
-                } else {
-                    ctx.lineTo(x, y);
-                }
+                if (!started) { ctx.moveTo(x, y); started = true; } else { ctx.lineTo(x, y); }
             });
             ctx.stroke();
             
@@ -1146,32 +1083,21 @@
             
             ctx.fillStyle = gradient;
             ctx.beginPath();
-            
             started = false;
-            validData.forEach((d) => {
+            validData.forEach(d => {
                 const x = padding.left + (d.index / (times.length - 1)) * chartWidth;
                 const y = padding.top + ((maxHeight - d.height) / heightRange) * chartHeight;
-                
-                if (!started) {
-                    ctx.moveTo(x, height - padding.bottom);
-                    ctx.lineTo(x, y);
-                    started = true;
-                } else {
-                    ctx.lineTo(x, y);
-                }
+                if (!started) { ctx.moveTo(x, height - padding.bottom); ctx.lineTo(x, y); started = true; } else { ctx.lineTo(x, y); }
             });
-            
             if (validData.length > 0) {
-                const lastD = validData[validData.length - 1];
-                const lastX = padding.left + (lastD.index / (times.length - 1)) * chartWidth;
+                const lastX = padding.left + (validData[validData.length - 1].index / (times.length - 1)) * chartWidth;
                 ctx.lineTo(lastX, height - padding.bottom);
             }
             ctx.closePath();
             ctx.fill();
             
             const now = new Date();
-            const startTime = new Date(times[0]);
-            const endTime = new Date(times[times.length - 1]);
+            const startTime = new Date(times[0]), endTime = new Date(times[times.length - 1]);
             
             if (now >= startTime && now <= endTime) {
                 const nowProgress = (now - startTime) / (endTime - startTime);
@@ -1188,12 +1114,10 @@
                 
                 ctx.fillStyle = '#ff6b6b';
                 ctx.font = 'bold 10px sans-serif';
-                ctx.textAlign = 'center';
                 ctx.fillText('NOW', nowX, padding.top - 8);
             }
             
-            const events = findTideEvents(times, heights);
-            events.forEach(event => {
+            findTideEvents(times, heights).forEach(event => {
                 const idx = times.indexOf(event.time);
                 const x = padding.left + (idx / (times.length - 1)) * chartWidth;
                 const y = padding.top + ((maxHeight - event.height) / heightRange) * chartHeight;
@@ -1208,7 +1132,6 @@
             });
         }
 
-        // Render tide events
         function renderTideEvents(times, heights) {
             const events = findTideEvents(times, heights);
             const container = document.getElementById('tideEvents');
@@ -1220,66 +1143,52 @@
             
             container.innerHTML = events.slice(0, 8).map(event => {
                 const date = new Date(event.time);
-                const timeStr = date.toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
-                const dateStr = date.toLocaleString('ja-JP', { month: 'short', day: 'numeric', weekday: 'short' });
-                const heightStr = (event.height >= 0 ? '+' : '') + event.height.toFixed(2) + 'm';
-                const typeLabel = event.type === 'high' ? '満潮 High' : '干潮 Low';
-                
                 return `
                     <div class="tide-event ${event.type}">
-                        <div class="tide-event-type">${typeLabel}</div>
-                        <div class="tide-event-time">${timeStr}</div>
-                        <div class="tide-event-height">${heightStr}</div>
-                        <div class="tide-event-date">${dateStr}</div>
+                        <div class="tide-event-type">${event.type === 'high' ? '満潮 High' : '干潮 Low'}</div>
+                        <div class="tide-event-time">${date.toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+                        <div class="tide-event-height">${(event.height >= 0 ? '+' : '') + event.height.toFixed(2)}m</div>
+                        <div class="tide-event-date">${date.toLocaleString('ja-JP', { month: 'short', day: 'numeric', weekday: 'short' })}</div>
                     </div>
                 `;
             }).join('');
         }
 
-        // Main function to load all data
         async function loadAllData() {
-            const beachContainer = document.getElementById('beaches');
+            const container = document.getElementById('forecastMatrix');
             const lastUpdated = document.getElementById('lastUpdated');
             
-            beachContainer.innerHTML = `
+            container.innerHTML = `
                 <div class="loading" style="grid-column: 1 / -1;">
                     <div class="loading-spinner"></div>
                     <p>データを取得中...</p>
                 </div>
             `;
+            closeHourlyPanel();
 
             try {
                 Object.keys(apiResponses).forEach(key => delete apiResponses[key]);
 
-                const beachResults = await Promise.all(
-                    beaches.map(async (beach) => {
-                        const weather = await fetchWeatherData(beach.lat, beach.lon, beach.name);
-                        return { beach, weather };
-                    })
-                );
-
-                beachResults.forEach(({ beach, weather }) => {
+                await Promise.all(beaches.map(async beach => {
+                    const weather = await fetchWeatherData(beach.lat, beach.lon, beach.name);
                     beachData[beach.name] = { beach, weatherData: weather, dates: getUniqueDates(weather.hourly) };
-                });
+                }));
 
-                renderBeaches();
+                renderMatrix();
 
                 const tideData = await fetchTideData(matsuyama.lat, matsuyama.lon);
-                
-                if (tideData.hourly && tideData.hourly.time && tideData.hourly.sea_level_height_msl) {
+                if (tideData.hourly?.time && tideData.hourly?.sea_level_height_msl) {
                     drawTideChart(tideData.hourly.time, tideData.hourly.sea_level_height_msl);
                     renderTideEvents(tideData.hourly.time, tideData.hourly.sea_level_height_msl);
                 }
 
                 renderTerminal();
-
                 lastUpdated.textContent = `最終更新: ${formatTime(new Date())}`;
             } catch (error) {
                 console.error('Error fetching data:', error);
-                beachContainer.innerHTML = `
+                container.innerHTML = `
                     <div class="error" style="grid-column: 1 / -1;">
                         <p>⚠️ データの取得に失敗しました</p>
-                        <p>Failed to fetch data. Please try again.</p>
                         <p style="margin-top: 10px; font-size: 0.8rem;">${error.message}</p>
                     </div>
                 `;
@@ -1287,8 +1196,7 @@
         }
 
         function refreshData() {
-            expandedBeach = null;
-            Object.keys(selectedDays).forEach(k => delete selectedDays[k]);
+            selectedCell = null;
             loadAllData();
         }
 
@@ -1297,14 +1205,13 @@
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
                 const tideData = apiResponses['tide-matsuyama'];
-                if (tideData && tideData.response.hourly) {
+                if (tideData?.response?.hourly) {
                     drawTideChart(tideData.response.hourly.time, tideData.response.hourly.sea_level_height_msl);
                 }
             }, 250);
         });
 
         document.addEventListener('DOMContentLoaded', loadAllData);
-
         setInterval(loadAllData, 10 * 60 * 1000);
     </script>
 </body>
