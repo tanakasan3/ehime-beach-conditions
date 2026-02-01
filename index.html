@@ -819,6 +819,19 @@
             return directions[Math.round(deg / 22.5) % 16];
         }
 
+        // Wind speed color scale (m/s)
+        function getWindColor(speed) {
+            if (speed === null || speed === undefined) return '#888';
+            if (speed < 2) return '#64B5F6';   // Light blue - calm
+            if (speed < 4) return '#4CAF50';   // Green - light breeze
+            if (speed < 6) return '#8BC34A';   // Yellow-green - gentle breeze
+            if (speed < 8) return '#FFEB3B';   // Yellow - moderate breeze
+            if (speed < 10) return '#FF9800';  // Orange - fresh breeze
+            if (speed < 15) return '#F44336';  // Red - strong breeze
+            if (speed < 20) return '#E91E63';  // Magenta - near gale
+            return '#9C27B0';                  // Purple - gale+
+        }
+
         function formatTime(date) {
             return date.toLocaleString('ja-JP', {
                 year: 'numeric', month: '2-digit', day: '2-digit',
@@ -1024,12 +1037,13 @@
                     const isSelected = selectedCell === cellKey;
                     
                     if (summary) {
+                        const windColor = getWindColor(summary.avgSpeed);
                         html += `
                             <div class="day-cell ${isSelected ? 'selected' : ''}" onclick="selectCell('${beach.name}', ${dayIndex}, '${date}')">
                                 <div class="cell-wind-display">
-                                    <div class="cell-wind-arrow" style="transform: rotate(${summary.avgDir}deg)">↓</div>
+                                    <div class="cell-wind-arrow" style="transform: rotate(${summary.avgDir}deg); color: ${windColor}; text-shadow: 0 0 10px ${windColor}40;">↓</div>
                                     <div class="cell-wind-info">
-                                        <div class="cell-wind-speed">${summary.avgSpeed.toFixed(1)}<span class="cell-wind-unit">m/s</span></div>
+                                        <div class="cell-wind-speed" style="color: ${windColor}">${summary.avgSpeed.toFixed(1)}<span class="cell-wind-unit">m/s</span></div>
                                         <div class="cell-wind-cardinal">${degreesToCardinal(summary.avgDir)}</div>
                                     </div>
                                 </div>
@@ -1074,14 +1088,17 @@
             title.textContent = `${beachName} - ${label.date} (${label.day})`;
             subtitle.textContent = '24時間の風データ • ハイライト = 9:00-17:00';
             
-            grid.innerHTML = allHours.map(h => `
-                <div class="hour-item ${h.isDaytime ? 'daytime' : ''}">
-                    <div class="hour-time">${h.hour}:00</div>
-                    <span class="hour-arrow" style="transform: rotate(${h.windDir || 0}deg)">↓</span>
-                    <div class="hour-speed">${h.windSpeed !== null ? h.windSpeed.toFixed(1) : '-'}</div>
-                    <div class="hour-cardinal">${degreesToCardinal(h.windDir)}</div>
-                </div>
-            `).join('');
+            grid.innerHTML = allHours.map(h => {
+                const hourColor = getWindColor(h.windSpeed);
+                return `
+                    <div class="hour-item ${h.isDaytime ? 'daytime' : ''}">
+                        <div class="hour-time">${h.hour}:00</div>
+                        <span class="hour-arrow" style="transform: rotate(${h.windDir || 0}deg); color: ${hourColor};">↓</span>
+                        <div class="hour-speed" style="color: ${hourColor}">${h.windSpeed !== null ? h.windSpeed.toFixed(1) : '-'}</div>
+                        <div class="hour-cardinal">${degreesToCardinal(h.windDir)}</div>
+                    </div>
+                `;
+            }).join('');
             
             panel.classList.add('visible');
             panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
