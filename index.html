@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愛媛ビーチコンディション | Ehime Beach Conditions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Hiragino Sans', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        .last-updated {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .beaches {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .beach-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .beach-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .beach-name {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .beach-name-en {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .conditions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .condition {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .condition-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        
+        .condition-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        
+        .condition-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #00d9ff;
+        }
+        
+        .condition-unit {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .wind-direction {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 217, 255, 0.1);
+            border-top-color: #00d9ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: rgba(255, 100, 100, 0.1);
+            border: 1px solid rgba(255, 100, 100, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #ff6b6b;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #444;
+            font-size: 0.85rem;
+        }
+        
+        footer a {
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        .forecast-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .forecast-toggle button {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .forecast-toggle button:hover,
+        .forecast-toggle button.active {
+            background: rgba(0, 217, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌊 愛媛ビーチコンディション</h1>
+            <p class="subtitle">Ehime Beach Conditions</p>
+            <p class="last-updated" id="lastUpdated">Loading...</p>
+        </header>
+
+        <div class="forecast-toggle">
+            <button class="active" onclick="showCurrent()">現在 / Current</button>
+            <button onclick="refreshData()">🔄 更新</button>
+        </div>
+
+        <div id="beaches" class="beaches">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>データを取得中... / Loading data...</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Data from <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a> (Weather & Marine API)</p>
+            <p style="margin-top: 10px;">⚡ Built by SierraVictor</p>
+        </footer>
+    </div>
+
+    <script>
+        // Beach locations in Ehime Prefecture
+        // Coordinates along the Seto Inland Sea coast
+        const beaches = [
+            {
+                name: '塩屋海岸',
+                nameEn: 'Shioya Beach',
+                lat: 34.0667,
+                lon: 132.9833,
+                // Near Imabari, Ehime
+            },
+            {
+                name: '堀江',
+                nameEn: 'Horie Beach',
+                lat: 33.8833,
+                lon: 132.7333,
+                // Matsuyama coastal area
+            },
+            {
+                name: '別府',
+                nameEn: 'Beppu Beach',
+                lat: 33.8583,
+                lon: 132.7167,
+                // South of Horie, Matsuyama
+            }
+        ];
+
+        // Convert degrees to cardinal direction
+        function degreesToCardinal(deg) {
+            if (deg === null || deg === undefined) return '-';
+            const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 
+                              'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+            const index = Math.round(deg / 22.5) % 16;
+            return directions[index];
+        }
+
+        // Get arrow for wind direction (points in direction wind is going TO)
+        function getWindArrow(deg) {
+            if (deg === null || deg === undefined) return '○';
+            return '↓';
+        }
+
+        // Format time for display
+        function formatTime(date) {
+            return date.toLocaleString('ja-JP', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            });
+        }
+
+        // Fetch weather data from Open-Meteo
+        async function fetchWeatherData(lat, lon) {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=Asia/Tokyo`;
+            const response = await fetch(url);
+            return response.json();
+        }
+
+        // Fetch marine data from Open-Meteo
+        async function fetchMarineData(lat, lon) {
+            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&current=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_direction&hourly=sea_level_height&timezone=Asia/Tokyo`;
+            const response = await fetch(url);
+            return response.json();
+        }
+
+        // Get current tide level from hourly data
+        function getCurrentTide(hourlyData) {
+            if (!hourlyData || !hourlyData.time || !hourlyData.sea_level_height) {
+                return null;
+            }
+            const now = new Date();
+            const currentHour = now.toISOString().slice(0, 13) + ':00';
+            const index = hourlyData.time.findIndex(t => t.startsWith(currentHour.slice(0, 13)));
+            if (index !== -1 && hourlyData.sea_level_height[index] !== null) {
+                return hourlyData.sea_level_height[index];
+            }
+            return hourlyData.sea_level_height[0];
+        }
+
+        // Render a single beach card
+        function renderBeachCard(beach, weatherData, marineData) {
+            const wind = weatherData?.current || {};
+            const marine = marineData?.current || {};
+            const tideLevel = getCurrentTide(marineData?.hourly);
+            
+            const windSpeed = wind.wind_speed_10m !== undefined ? wind.wind_speed_10m.toFixed(1) : '-';
+            const windDir = wind.wind_direction_10m;
+            const windCardinal = degreesToCardinal(windDir);
+            
+            const waveHeight = marine.wave_height !== undefined ? marine.wave_height.toFixed(1) : '-';
+            const waveDir = marine.wave_direction;
+            const waveCardinal = degreesToCardinal(waveDir);
+            
+            const tide = tideLevel !== null ? (tideLevel >= 0 ? '+' : '') + tideLevel.toFixed(2) : '-';
+
+            return `
+                <div class="beach-card">
+                    <h2 class="beach-name">${beach.name}</h2>
+                    <p class="beach-name-en">${beach.nameEn}</p>
+                    <div class="conditions">
+                        <div class="condition">
+                            <div class="condition-icon">🌊</div>
+                            <div class="condition-label">Wave</div>
+                            <div class="condition-value">${waveHeight}<span class="condition-unit">m</span></div>
+                            <div class="condition-unit">${waveCardinal}</div>
+                        </div>
+                        <div class="condition">
+                            <div class="condition-icon">💨</div>
+                            <div class="condition-label">Wind</div>
+                            <div class="condition-value">${windSpeed}<span class="condition-unit">m/s</span></div>
+                            <div class="condition-unit" style="transform: rotate(${windDir || 0}deg)" class="wind-direction">${windCardinal} ↓</div>
+                        </div>
+                        <div class="condition">
+                            <div class="condition-icon">🌙</div>
+                            <div class="condition-label">Tide</div>
+                            <div class="condition-value">${tide}<span class="condition-unit">m</span></div>
+                            <div class="condition-unit">MSL</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Main function to load all data
+        async function loadAllData() {
+            const container = document.getElementById('beaches');
+            const lastUpdated = document.getElementById('lastUpdated');
+            
+            container.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>データを取得中... / Loading data...</p>
+                </div>
+            `;
+
+            try {
+                const results = await Promise.all(
+                    beaches.map(async (beach) => {
+                        const [weather, marine] = await Promise.all([
+                            fetchWeatherData(beach.lat, beach.lon),
+                            fetchMarineData(beach.lat, beach.lon)
+                        ]);
+                        return { beach, weather, marine };
+                    })
+                );
+
+                container.innerHTML = results
+                    .map(({ beach, weather, marine }) => renderBeachCard(beach, weather, marine))
+                    .join('');
+
+                lastUpdated.textContent = `最終更新: ${formatTime(new Date())}`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                container.innerHTML = `
+                    <div class="error">
+                        <p>⚠️ データの取得に失敗しました</p>
+                        <p>Failed to fetch data. Please try again.</p>
+                        <p style="margin-top: 10px; font-size: 0.8rem;">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showCurrent() {
+            loadAllData();
+        }
+
+        function refreshData() {
+            loadAllData();
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadAllData);
+
+        // Auto-refresh every 10 minutes
+        setInterval(loadAllData, 10 * 60 * 1000);
+    </script>
+</body>
+</html>
