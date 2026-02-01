@@ -26,7 +26,7 @@
         
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             padding: 20px;
         }
         
@@ -50,8 +50,9 @@
         
         .beaches {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         }
         
         .beach-card {
@@ -61,6 +62,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
         }
         
         .beach-card:hover {
@@ -69,57 +71,159 @@
         }
         
         .beach-name {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .beach-name-en {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 20px;
         }
         
-        .conditions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+        .wind-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 15px;
         }
         
-        .condition {
+        .wind-arrow {
+            font-size: 3rem;
+            color: #00d9ff;
+            transition: transform 0.5s ease;
+            text-shadow: 0 0 15px rgba(0, 217, 255, 0.5);
+        }
+        
+        .wind-info {
+            text-align: left;
+        }
+        
+        .wind-speed {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .wind-speed-unit {
+            font-size: 1rem;
+            color: #888;
+        }
+        
+        .wind-cardinal {
+            color: #00d9ff;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .tide-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .tide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .tide-title {
+            font-size: 1.5rem;
+            color: #fff;
+        }
+        
+        .tide-title-sub {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .tide-chart-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin-bottom: 15px;
+        }
+        
+        .tide-chart {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .tide-events {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .tide-event {
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 12px;
             text-align: center;
         }
         
-        .condition-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
+        .tide-event.high {
+            border-left: 3px solid #00d9ff;
         }
         
-        .condition-label {
+        .tide-event.low {
+            border-left: 3px solid #ff6b6b;
+        }
+        
+        .tide-event-type {
             font-size: 0.75rem;
-            color: #888;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 5px;
         }
         
-        .condition-value {
-            font-size: 1.4rem;
-            font-weight: bold;
+        .tide-event.high .tide-event-type {
             color: #00d9ff;
         }
         
-        .condition-unit {
-            font-size: 0.8rem;
-            color: #666;
+        .tide-event.low .tide-event-type {
+            color: #ff6b6b;
         }
         
-        .wind-direction {
-            display: inline-block;
-            transition: transform 0.3s ease;
+        .tide-event-time {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .tide-event-height {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .tide-event-date {
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 3px;
+        }
+        
+        .refresh-btn {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            color: #00d9ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .refresh-btn:hover {
+            background: rgba(0, 217, 255, 0.3);
         }
         
         .loading {
@@ -153,7 +257,7 @@
         
         footer {
             text-align: center;
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 20px;
             color: #444;
             font-size: 0.85rem;
@@ -164,25 +268,22 @@
             text-decoration: none;
         }
 
-        .forecast-toggle {
-            text-align: center;
-            margin-bottom: 20px;
+        .now-marker {
+            position: absolute;
+            width: 2px;
+            background: #ff6b6b;
+            top: 0;
+            bottom: 30px;
+            z-index: 10;
         }
-
-        .forecast-toggle button {
-            background: rgba(0, 217, 255, 0.1);
-            border: 1px solid rgba(0, 217, 255, 0.3);
-            color: #00d9ff;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .forecast-toggle button:hover,
-        .forecast-toggle button.active {
-            background: rgba(0, 217, 255, 0.3);
+        
+        .now-label {
+            position: absolute;
+            top: -20px;
+            transform: translateX(-50%);
+            color: #ff6b6b;
+            font-size: 0.7rem;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -194,16 +295,25 @@
             <p class="last-updated" id="lastUpdated">Loading...</p>
         </header>
 
-        <div class="forecast-toggle">
-            <button class="active" onclick="showCurrent()">現在 / Current</button>
-            <button onclick="refreshData()">🔄 更新</button>
-        </div>
-
         <div id="beaches" class="beaches">
             <div class="loading">
                 <div class="loading-spinner"></div>
-                <p>データを取得中... / Loading data...</p>
+                <p>データを取得中...</p>
             </div>
+        </div>
+
+        <div class="tide-section">
+            <div class="tide-header">
+                <div>
+                    <h2 class="tide-title">🌙 松山潮汐チャート</h2>
+                    <p class="tide-title-sub">Matsuyama Tide Chart - Next 48 Hours</p>
+                </div>
+                <button class="refresh-btn" onclick="refreshData()">🔄 更新</button>
+            </div>
+            <div class="tide-chart-container">
+                <canvas id="tideChart" class="tide-chart"></canvas>
+            </div>
+            <div id="tideEvents" class="tide-events"></div>
         </div>
 
         <footer>
@@ -213,31 +323,30 @@
     </div>
 
     <script>
-        // Beach locations in Ehime Prefecture
-        // Coordinates along the Seto Inland Sea coast
+        // Beach locations in Ehime Prefecture (updated coordinates)
         const beaches = [
             {
                 name: '塩屋海岸',
                 nameEn: 'Shioya Beach',
-                lat: 34.0667,
-                lon: 132.9833,
-                // Near Imabari, Ehime
+                lat: 33.799102,
+                lon: 132.690173,
             },
             {
                 name: '堀江',
                 nameEn: 'Horie Beach',
-                lat: 33.8833,
-                lon: 132.7333,
-                // Matsuyama coastal area
+                lat: 33.905024,
+                lon: 132.739466,
             },
             {
                 name: '別府',
                 nameEn: 'Beppu Beach',
-                lat: 33.8583,
-                lon: 132.7167,
-                // South of Horie, Matsuyama
+                lat: 34.067622,
+                lon: 132.899053,
             }
         ];
+
+        // Matsuyama coordinates for tide data
+        const matsuyama = { lat: 33.8392, lon: 132.7656 };
 
         // Convert degrees to cardinal direction
         function degreesToCardinal(deg) {
@@ -246,12 +355,6 @@
                               'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
             const index = Math.round(deg / 22.5) % 16;
             return directions[index];
-        }
-
-        // Get arrow for wind direction (points in direction wind is going TO)
-        function getWindArrow(deg) {
-            if (deg === null || deg === undefined) return '○';
-            return '↓';
         }
 
         // Format time for display
@@ -266,110 +369,325 @@
             });
         }
 
+        // Format hour for chart
+        function formatHour(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
+        }
+
+        // Format date short
+        function formatDateShort(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString('ja-JP', { month: 'short', day: 'numeric' });
+        }
+
         // Fetch weather data from Open-Meteo
         async function fetchWeatherData(lat, lon) {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms&timezone=Asia/Tokyo`;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Asia/Tokyo`;
             const response = await fetch(url);
             return response.json();
         }
 
-        // Fetch marine data from Open-Meteo
-        async function fetchMarineData(lat, lon) {
-            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&current=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_direction&hourly=sea_level_height&timezone=Asia/Tokyo`;
+        // Fetch marine/tide data from Open-Meteo
+        async function fetchTideData(lat, lon) {
+            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height&timezone=Asia/Tokyo&forecast_hours=48`;
             const response = await fetch(url);
             return response.json();
         }
 
-        // Get current tide level from hourly data
-        function getCurrentTide(hourlyData) {
-            if (!hourlyData || !hourlyData.time || !hourlyData.sea_level_height) {
-                return null;
+        // Find high and low tides from hourly data
+        function findTideEvents(times, heights) {
+            const events = [];
+            for (let i = 1; i < heights.length - 1; i++) {
+                if (heights[i] === null) continue;
+                const prev = heights[i - 1];
+                const curr = heights[i];
+                const next = heights[i + 1];
+                if (prev === null || next === null) continue;
+                
+                if (curr > prev && curr > next) {
+                    events.push({ type: 'high', time: times[i], height: curr });
+                } else if (curr < prev && curr < next) {
+                    events.push({ type: 'low', time: times[i], height: curr });
+                }
             }
+            return events;
+        }
+
+        // Draw tide chart on canvas
+        function drawTideChart(times, heights) {
+            const canvas = document.getElementById('tideChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            
+            const width = rect.width;
+            const height = rect.height;
+            const padding = { top: 30, right: 20, bottom: 40, left: 50 };
+            const chartWidth = width - padding.left - padding.right;
+            const chartHeight = height - padding.top - padding.bottom;
+            
+            // Filter out nulls and find range
+            const validData = heights.map((h, i) => ({ height: h, time: times[i], index: i }))
+                                    .filter(d => d.height !== null);
+            
+            if (validData.length === 0) return;
+            
+            const minHeight = Math.min(...validData.map(d => d.height));
+            const maxHeight = Math.max(...validData.map(d => d.height));
+            const heightRange = maxHeight - minHeight || 1;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw grid lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 1;
+            
+            // Horizontal grid lines
+            for (let i = 0; i <= 4; i++) {
+                const y = padding.top + (chartHeight / 4) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(width - padding.right, y);
+                ctx.stroke();
+                
+                // Y-axis labels
+                const heightVal = maxHeight - (heightRange / 4) * i;
+                ctx.fillStyle = '#666';
+                ctx.font = '11px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(heightVal.toFixed(1) + 'm', padding.left - 8, y + 4);
+            }
+            
+            // Draw time labels (every 6 hours)
+            ctx.fillStyle = '#666';
+            ctx.font = '11px sans-serif';
+            ctx.textAlign = 'center';
+            
+            for (let i = 0; i < times.length; i += 6) {
+                const x = padding.left + (i / (times.length - 1)) * chartWidth;
+                const date = new Date(times[i]);
+                const hour = date.getHours();
+                
+                // Vertical grid line
+                ctx.strokeStyle = hour === 0 ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)';
+                ctx.beginPath();
+                ctx.moveTo(x, padding.top);
+                ctx.lineTo(x, height - padding.bottom);
+                ctx.stroke();
+                
+                // Time label
+                ctx.fillStyle = '#666';
+                ctx.fillText(formatHour(times[i]), x, height - padding.bottom + 15);
+                
+                // Date label at midnight
+                if (hour === 0) {
+                    ctx.fillText(formatDateShort(times[i]), x, height - padding.bottom + 28);
+                }
+            }
+            
+            // Draw zero line if visible
+            if (minHeight < 0 && maxHeight > 0) {
+                const zeroY = padding.top + ((maxHeight - 0) / heightRange) * chartHeight;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(padding.left, zeroY);
+                ctx.lineTo(width - padding.right, zeroY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // Draw tide curve
+            ctx.strokeStyle = '#00d9ff';
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            
+            let started = false;
+            validData.forEach((d, i) => {
+                const x = padding.left + (d.index / (times.length - 1)) * chartWidth;
+                const y = padding.top + ((maxHeight - d.height) / heightRange) * chartHeight;
+                
+                if (!started) {
+                    ctx.moveTo(x, y);
+                    started = true;
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            ctx.stroke();
+            
+            // Fill under curve
+            const gradient = ctx.createLinearGradient(0, padding.top, 0, height - padding.bottom);
+            gradient.addColorStop(0, 'rgba(0, 217, 255, 0.3)');
+            gradient.addColorStop(1, 'rgba(0, 217, 255, 0.05)');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            
+            started = false;
+            validData.forEach((d, i) => {
+                const x = padding.left + (d.index / (times.length - 1)) * chartWidth;
+                const y = padding.top + ((maxHeight - d.height) / heightRange) * chartHeight;
+                
+                if (!started) {
+                    ctx.moveTo(x, height - padding.bottom);
+                    ctx.lineTo(x, y);
+                    started = true;
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+            
+            if (validData.length > 0) {
+                const lastD = validData[validData.length - 1];
+                const lastX = padding.left + (lastD.index / (times.length - 1)) * chartWidth;
+                ctx.lineTo(lastX, height - padding.bottom);
+            }
+            ctx.closePath();
+            ctx.fill();
+            
+            // Draw "now" marker
             const now = new Date();
-            const currentHour = now.toISOString().slice(0, 13) + ':00';
-            const index = hourlyData.time.findIndex(t => t.startsWith(currentHour.slice(0, 13)));
-            if (index !== -1 && hourlyData.sea_level_height[index] !== null) {
-                return hourlyData.sea_level_height[index];
+            const startTime = new Date(times[0]);
+            const endTime = new Date(times[times.length - 1]);
+            
+            if (now >= startTime && now <= endTime) {
+                const nowProgress = (now - startTime) / (endTime - startTime);
+                const nowX = padding.left + nowProgress * chartWidth;
+                
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.moveTo(nowX, padding.top);
+                ctx.lineTo(nowX, height - padding.bottom);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                
+                // "Now" label
+                ctx.fillStyle = '#ff6b6b';
+                ctx.font = 'bold 10px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('NOW', nowX, padding.top - 8);
             }
-            return hourlyData.sea_level_height[0];
+            
+            // Mark high/low points
+            const events = findTideEvents(times, heights);
+            events.forEach(event => {
+                const idx = times.indexOf(event.time);
+                const x = padding.left + (idx / (times.length - 1)) * chartWidth;
+                const y = padding.top + ((maxHeight - event.height) / heightRange) * chartHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = event.type === 'high' ? '#00d9ff' : '#ff6b6b';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
         }
 
         // Render a single beach card
-        function renderBeachCard(beach, weatherData, marineData) {
+        function renderBeachCard(beach, weatherData) {
             const wind = weatherData?.current || {};
-            const marine = marineData?.current || {};
-            const tideLevel = getCurrentTide(marineData?.hourly);
             
             const windSpeed = wind.wind_speed_10m !== undefined ? wind.wind_speed_10m.toFixed(1) : '-';
             const windDir = wind.wind_direction_10m;
             const windCardinal = degreesToCardinal(windDir);
             
-            const waveHeight = marine.wave_height !== undefined ? marine.wave_height.toFixed(1) : '-';
-            const waveDir = marine.wave_direction;
-            const waveCardinal = degreesToCardinal(waveDir);
-            
-            const tide = tideLevel !== null ? (tideLevel >= 0 ? '+' : '') + tideLevel.toFixed(2) : '-';
+            // Arrow points in direction wind is blowing TO (add 180 to direction wind comes FROM)
+            const arrowRotation = windDir !== undefined ? windDir : 0;
 
             return `
                 <div class="beach-card">
                     <h2 class="beach-name">${beach.name}</h2>
                     <p class="beach-name-en">${beach.nameEn}</p>
-                    <div class="conditions">
-                        <div class="condition">
-                            <div class="condition-icon">🌊</div>
-                            <div class="condition-label">Wave</div>
-                            <div class="condition-value">${waveHeight}<span class="condition-unit">m</span></div>
-                            <div class="condition-unit">${waveCardinal}</div>
-                        </div>
-                        <div class="condition">
-                            <div class="condition-icon">💨</div>
-                            <div class="condition-label">Wind</div>
-                            <div class="condition-value">${windSpeed}<span class="condition-unit">m/s</span></div>
-                            <div class="condition-unit" style="transform: rotate(${windDir || 0}deg)" class="wind-direction">${windCardinal} ↓</div>
-                        </div>
-                        <div class="condition">
-                            <div class="condition-icon">🌙</div>
-                            <div class="condition-label">Tide</div>
-                            <div class="condition-value">${tide}<span class="condition-unit">m</span></div>
-                            <div class="condition-unit">MSL</div>
+                    <div class="wind-display">
+                        <div class="wind-arrow" style="transform: rotate(${arrowRotation}deg)">↓</div>
+                        <div class="wind-info">
+                            <div class="wind-speed">${windSpeed}<span class="wind-speed-unit"> m/s</span></div>
+                            <div class="wind-cardinal">${windCardinal}</div>
                         </div>
                     </div>
                 </div>
             `;
         }
 
+        // Render tide events
+        function renderTideEvents(times, heights) {
+            const events = findTideEvents(times, heights);
+            const container = document.getElementById('tideEvents');
+            
+            if (events.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center;">No tide events found</p>';
+                return;
+            }
+            
+            container.innerHTML = events.slice(0, 8).map(event => {
+                const date = new Date(event.time);
+                const timeStr = date.toLocaleString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false });
+                const dateStr = date.toLocaleString('ja-JP', { month: 'short', day: 'numeric', weekday: 'short' });
+                const heightStr = (event.height >= 0 ? '+' : '') + event.height.toFixed(2) + 'm';
+                const typeLabel = event.type === 'high' ? '満潮 High' : '干潮 Low';
+                
+                return `
+                    <div class="tide-event ${event.type}">
+                        <div class="tide-event-type">${typeLabel}</div>
+                        <div class="tide-event-time">${timeStr}</div>
+                        <div class="tide-event-height">${heightStr}</div>
+                        <div class="tide-event-date">${dateStr}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         // Main function to load all data
         async function loadAllData() {
-            const container = document.getElementById('beaches');
+            const beachContainer = document.getElementById('beaches');
             const lastUpdated = document.getElementById('lastUpdated');
             
-            container.innerHTML = `
-                <div class="loading">
+            beachContainer.innerHTML = `
+                <div class="loading" style="grid-column: 1 / -1;">
                     <div class="loading-spinner"></div>
-                    <p>データを取得中... / Loading data...</p>
+                    <p>データを取得中...</p>
                 </div>
             `;
 
             try {
-                const results = await Promise.all(
+                // Fetch beach wind data
+                const beachResults = await Promise.all(
                     beaches.map(async (beach) => {
-                        const [weather, marine] = await Promise.all([
-                            fetchWeatherData(beach.lat, beach.lon),
-                            fetchMarineData(beach.lat, beach.lon)
-                        ]);
-                        return { beach, weather, marine };
+                        const weather = await fetchWeatherData(beach.lat, beach.lon);
+                        return { beach, weather };
                     })
                 );
 
-                container.innerHTML = results
-                    .map(({ beach, weather, marine }) => renderBeachCard(beach, weather, marine))
+                beachContainer.innerHTML = beachResults
+                    .map(({ beach, weather }) => renderBeachCard(beach, weather))
                     .join('');
+
+                // Fetch tide data for Matsuyama
+                const tideData = await fetchTideData(matsuyama.lat, matsuyama.lon);
+                
+                if (tideData.hourly && tideData.hourly.time && tideData.hourly.sea_level_height) {
+                    drawTideChart(tideData.hourly.time, tideData.hourly.sea_level_height);
+                    renderTideEvents(tideData.hourly.time, tideData.hourly.sea_level_height);
+                }
 
                 lastUpdated.textContent = `最終更新: ${formatTime(new Date())}`;
             } catch (error) {
                 console.error('Error fetching data:', error);
-                container.innerHTML = `
-                    <div class="error">
+                beachContainer.innerHTML = `
+                    <div class="error" style="grid-column: 1 / -1;">
                         <p>⚠️ データの取得に失敗しました</p>
                         <p>Failed to fetch data. Please try again.</p>
                         <p style="margin-top: 10px; font-size: 0.8rem;">${error.message}</p>
@@ -378,13 +696,18 @@
             }
         }
 
-        function showCurrent() {
-            loadAllData();
-        }
-
         function refreshData() {
             loadAllData();
         }
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                loadAllData();
+            }, 250);
+        });
 
         // Load data on page load
         document.addEventListener('DOMContentLoaded', loadAllData);
