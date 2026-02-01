@@ -562,6 +562,30 @@
             text-decoration: none;
         }
 
+        .otaku-divider {
+            text-align: center;
+            margin: 40px 0 20px;
+            position: relative;
+        }
+
+        .otaku-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .otaku-divider span {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%);
+            padding: 0 20px;
+            position: relative;
+            color: #555;
+            font-size: 0.85rem;
+        }
+
         .terminal-section {
             background: #0d1117;
             border-radius: 12px;
@@ -748,6 +772,10 @@
                     <div id="tideEvents" class="tide-events"></div>
                 </div>
             </div>
+        </div>
+
+        <div class="otaku-divider">
+            <span>📡 オタク専用ゾーン</span>
         </div>
 
         <div class="terminal-section">
