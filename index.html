@@ -276,6 +276,32 @@
             margin-top: 6px;
         }
 
+        .foil-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .foil-icon {
+            font-size: 0.9rem;
+            padding: 3px 6px;
+            border-radius: 6px;
+            line-height: 1;
+        }
+
+        .foil-icon.red {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        .foil-icon.yellow {
+            background: rgba(255, 235, 59, 0.35);
+        }
+
+        .foil-icon.green {
+            background: rgba(76, 175, 80, 0.35);
+        }
+
         /* Expanded hourly view */
         .hourly-panel {
             background: rgba(255, 255, 255, 0.05);
@@ -843,6 +869,23 @@
             return '#9C27B0';                  // Purple - gale+
         }
 
+        // Foil status for 70kg rider
+        // Kite foil (15m²): absolute min 3.5 m/s, practical min 5 m/s
+        // Wing foil (8m²): absolute min 5 m/s, practical min 7 m/s
+        function getKiteFoilStatus(speed) {
+            if (speed === null || speed === undefined) return 'red';
+            if (speed < 3.5) return 'red';
+            if (speed < 5) return 'yellow';
+            return 'green';
+        }
+
+        function getWingFoilStatus(speed) {
+            if (speed === null || speed === undefined) return 'red';
+            if (speed < 5) return 'red';
+            if (speed < 7) return 'yellow';
+            return 'green';
+        }
+
         function formatTime(date) {
             return date.toLocaleString('ja-JP', {
                 year: 'numeric', month: '2-digit', day: '2-digit',
@@ -1049,6 +1092,8 @@
                     
                     if (summary) {
                         const windColor = getWindColor(summary.avgSpeed);
+                        const kiteStatus = getKiteFoilStatus(summary.avgSpeed);
+                        const wingStatus = getWingFoilStatus(summary.avgSpeed);
                         html += `
                             <div class="day-cell ${isSelected ? 'selected' : ''}" onclick="selectCell('${beach.name}', ${dayIndex}, '${date}')">
                                 <div class="cell-wind-display">
@@ -1059,7 +1104,10 @@
                                     </div>
                                 </div>
                                 <div class="cell-wind-range">${summary.minSpeed.toFixed(1)}-${summary.maxSpeed.toFixed(1)} m/s</div>
-                                <div class="cell-hint">タップで詳細</div>
+                                <div class="foil-indicators">
+                                    <span class="foil-icon ${kiteStatus}" title="Kite foil (15m²)">🪁</span>
+                                    <span class="foil-icon ${wingStatus}" title="Wing foil (8m²)">🪽</span>
+                                </div>
                             </div>
                         `;
                     } else {
