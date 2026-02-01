@@ -407,16 +407,44 @@
             font-size: 0.9rem;
         }
         
+        .tide-chart-scroll {
+            overflow-x: auto;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tide-chart-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .tide-chart-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .tide-chart-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 3px;
+        }
+
         .tide-chart-container {
             position: relative;
-            width: 100%;
-            height: 250px;
-            margin-bottom: 15px;
+            width: 700px;
+            min-width: 700px;
+            height: 220px;
         }
         
         .tide-chart {
             width: 100%;
             height: 100%;
+        }
+
+        @media (min-width: 750px) {
+            .tide-chart-container {
+                width: 100%;
+                min-width: 100%;
+            }
         }
         
         .tide-events {
@@ -704,12 +732,14 @@
             <div class="tide-header">
                 <div>
                     <h2 class="tide-title">🌙 松山潮汐チャート</h2>
-                    <p class="tide-title-sub">Matsuyama Tide Chart - Next 48 Hours</p>
+                    <p class="tide-title-sub">Matsuyama Tide Chart - Next 42 Hours</p>
                 </div>
                 <button class="refresh-btn" onclick="refreshData()">🔄 更新</button>
             </div>
-            <div class="tide-chart-container">
-                <canvas id="tideChart" class="tide-chart"></canvas>
+            <div class="tide-chart-scroll">
+                <div class="tide-chart-container">
+                    <canvas id="tideChart" class="tide-chart"></canvas>
+                </div>
             </div>
             <div id="tideEvents" class="tide-events"></div>
         </div>
@@ -904,7 +934,7 @@
         }
 
         async function fetchTideData(lat, lon) {
-            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height_msl&timezone=Asia/Tokyo&forecast_hours=48`;
+            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height_msl&timezone=Asia/Tokyo&forecast_hours=42`;
             const response = await fetch(url);
             const data = await response.json();
             
