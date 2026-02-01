@@ -48,6 +48,38 @@
             margin-top: 10px;
         }
         
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 10px 18px;
+            color: #00d9ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-link:hover {
+            background: rgba(0, 217, 255, 0.15);
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .quick-link-icon {
+            font-size: 1.1rem;
+        }
+
         .beaches {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -416,6 +448,17 @@
             <p class="subtitle">Ehime Beach Conditions</p>
             <p class="last-updated" id="lastUpdated">Loading...</p>
         </header>
+
+        <div class="quick-links">
+            <a href="https://tenki.jp/amedas/8/41/73168.html" target="_blank" class="quick-link">
+                <span class="quick-link-icon">📡</span>
+                松山南吉田のアメダス
+            </a>
+            <a href="https://tenki.jp/forecast/8/41/7310/38201/1hour.html" target="_blank" class="quick-link">
+                <span class="quick-link-icon">🌤</span>
+                松山市の天気
+            </a>
+        </div>
 
         <div id="beaches" class="beaches">
             <div class="loading">
