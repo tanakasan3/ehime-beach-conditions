@@ -81,33 +81,83 @@
         }
 
         /* Matrix Layout */
+        .matrix-scroll-container {
+            overflow-x: auto;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .matrix-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .matrix-scroll-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .matrix-scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 3px;
+        }
+
         .forecast-matrix {
             display: grid;
-            grid-template-columns: auto repeat(5, 1fr);
+            grid-template-columns: 70px repeat(5, minmax(120px, 1fr));
             gap: 8px;
-            margin-bottom: 30px;
+            min-width: max-content;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 700px) {
             .forecast-matrix {
-                grid-template-columns: auto repeat(3, 1fr);
+                grid-template-columns: 55px repeat(5, minmax(95px, 1fr));
             }
-            .forecast-matrix .beach-header:nth-child(n+5),
-            .forecast-matrix .day-cell:nth-child(6n+5),
-            .forecast-matrix .day-cell:nth-child(6n+6) {
-                display: none;
+
+            .day-label {
+                padding: 8px 5px;
+            }
+
+            .day-label-date {
+                font-size: 0.8rem;
+            }
+
+            .day-label-weekday {
+                font-size: 0.65rem;
+            }
+
+            .beach-header {
+                padding: 10px 5px;
+            }
+
+            .beach-header-name {
+                font-size: 0.85rem;
+            }
+
+            .day-cell {
+                padding: 10px 6px;
+            }
+
+            .cell-wind-arrow {
+                font-size: 1.3rem;
+            }
+
+            .cell-wind-speed {
+                font-size: 0.95rem;
             }
         }
 
-        @media (max-width: 600px) {
-            .forecast-matrix {
-                grid-template-columns: auto repeat(2, 1fr);
-            }
-            .forecast-matrix .beach-header:nth-child(n+4),
-            .forecast-matrix .day-cell:nth-child(6n+4),
-            .forecast-matrix .day-cell:nth-child(6n+5),
-            .forecast-matrix .day-cell:nth-child(6n+6) {
-                display: none;
+        .scroll-hint {
+            display: none;
+            text-align: center;
+            color: #555;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .scroll-hint {
+                display: block;
             }
         }
 
@@ -629,10 +679,13 @@
             </a>
         </div>
 
-        <div id="forecastMatrix" class="forecast-matrix">
-            <div class="loading" style="grid-column: 1 / -1;">
-                <div class="loading-spinner"></div>
-                <p>データを取得中...</p>
+        <div class="scroll-hint">← 横スクロールで全ビーチ表示 →</div>
+        <div class="matrix-scroll-container">
+            <div id="forecastMatrix" class="forecast-matrix">
+                <div class="loading" style="grid-column: 1 / -1;">
+                    <div class="loading-spinner"></div>
+                    <p>データを取得中...</p>
+                </div>
             </div>
         </div>
 
