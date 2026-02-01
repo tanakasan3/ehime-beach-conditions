@@ -599,7 +599,7 @@
 
         // Fetch marine/tide data from Open-Meteo
         async function fetchTideData(lat, lon) {
-            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height&timezone=Asia/Tokyo&forecast_hours=48`;
+            const url = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lon}&hourly=sea_level_height_msl&timezone=Asia/Tokyo&forecast_hours=48`;
             const response = await fetch(url);
             const data = await response.json();
             
@@ -899,9 +899,9 @@
                 // Fetch tide data for Matsuyama
                 const tideData = await fetchTideData(matsuyama.lat, matsuyama.lon);
                 
-                if (tideData.hourly && tideData.hourly.time && tideData.hourly.sea_level_height) {
-                    drawTideChart(tideData.hourly.time, tideData.hourly.sea_level_height);
-                    renderTideEvents(tideData.hourly.time, tideData.hourly.sea_level_height);
+                if (tideData.hourly && tideData.hourly.time && tideData.hourly.sea_level_height_msl) {
+                    drawTideChart(tideData.hourly.time, tideData.hourly.sea_level_height_msl);
+                    renderTideEvents(tideData.hourly.time, tideData.hourly.sea_level_height_msl);
                 }
 
                 // Render terminal with API responses
