@@ -325,22 +325,31 @@
             color: #fff;
         }
 
+        .hourly-scroll {
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .hourly-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .hourly-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        .hourly-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0, 217, 255, 0.3);
+            border-radius: 3px;
+        }
+
         .hourly-grid {
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
+            grid-template-columns: repeat(24, minmax(50px, 1fr));
             gap: 6px;
-        }
-
-        @media (max-width: 800px) {
-            .hourly-grid {
-                grid-template-columns: repeat(8, 1fr);
-            }
-        }
-
-        @media (max-width: 500px) {
-            .hourly-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
+            min-width: max-content;
         }
 
         .hour-item {
@@ -753,7 +762,9 @@
                 </div>
                 <button class="close-btn" onclick="closeHourlyPanel()">✕ 閉じる</button>
             </div>
-            <div class="hourly-grid" id="hourlyGrid"></div>
+            <div class="hourly-scroll">
+                <div class="hourly-grid" id="hourlyGrid"></div>
+            </div>
         </div>
 
         <div class="tide-section">
