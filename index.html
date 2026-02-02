@@ -276,6 +276,24 @@
             margin-top: 6px;
         }
 
+        .weather-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .weather-icon {
+            font-size: 1.1rem;
+        }
+
+        .weather-temp {
+            color: #aaa;
+            font-weight: 500;
+        }
+
         .foil-indicators {
             display: flex;
             justify-content: center;
@@ -898,6 +916,21 @@
             return 'green';
         }
 
+        // WMO Weather Code to emoji
+        function getWeatherIcon(code) {
+            if (code === null || code === undefined) return '❓';
+            if (code === 0) return '☀️';                    // Clear sky
+            if (code <= 3) return ['🌤️', '⛅', '☁️'][code - 1]; // Partly cloudy
+            if (code <= 48) return '🌫️';                   // Fog
+            if (code <= 57) return '🌧️';                   // Drizzle
+            if (code <= 67) return '🌧️';                   // Rain
+            if (code <= 77) return '❄️';                   // Snow
+            if (code <= 82) return '🌦️';                   // Rain showers
+            if (code <= 86) return '🌨️';                   // Snow showers
+            if (code >= 95) return '⛈️';                   // Thunderstorm
+            return '❓';
+        }
+
         function formatTime(date) {
             return date.toLocaleString('ja-JP', {
                 year: 'numeric', month: '2-digit', day: '2-digit',
@@ -927,7 +960,9 @@
                         daytimeHours.push({
                             time, hour,
                             windSpeed: hourlyData.wind_speed_10m[i],
-                            windDir: hourlyData.wind_direction_10m[i]
+                            windDir: hourlyData.wind_direction_10m[i],
+                            temp: hourlyData.temperature_2m[i],
+                            weatherCode: hourlyData.weather_code[i]
                         });
                     }
                 }
@@ -947,6 +982,8 @@
                         time, hour,
                         windSpeed: hourlyData.wind_speed_10m[i],
                         windDir: hourlyData.wind_direction_10m[i],
+                        temp: hourlyData.temperature_2m[i],
+                        weatherCode: hourlyData.weather_code[i],
                         isDaytime: hour >= 9 && hour <= 17
                     });
                 }
@@ -959,6 +996,8 @@
             
             const speeds = daytimeData.map(d => d.windSpeed).filter(s => s !== null);
             const dirs = daytimeData.map(d => d.windDir).filter(d => d !== null);
+            const temps = daytimeData.map(d => d.temp).filter(t => t !== null);
+            const weatherCodes = daytimeData.map(d => d.weatherCode).filter(w => w !== null);
             
             if (speeds.length === 0) return null;
             
@@ -969,11 +1008,18 @@
             });
             const avgDir = ((Math.atan2(sinSum / dirs.length, cosSum / dirs.length) * 180 / Math.PI) + 360) % 360;
             
+            // Most common weather code
+            const weatherCount = {};
+            weatherCodes.forEach(w => weatherCount[w] = (weatherCount[w] || 0) + 1);
+            const dominantWeather = Object.entries(weatherCount).sort((a, b) => b[1] - a[1])[0]?.[0];
+            
             return {
                 avgSpeed: speeds.reduce((a, b) => a + b, 0) / speeds.length,
                 minSpeed: Math.min(...speeds),
                 maxSpeed: Math.max(...speeds),
-                avgDir
+                avgDir,
+                avgTemp: temps.length > 0 ? temps.reduce((a, b) => a + b, 0) / temps.length : null,
+                weatherCode: dominantWeather !== undefined ? parseInt(dominantWeather) : null
             };
         }
 
@@ -1038,7 +1084,7 @@
         }
 
         async function fetchWeatherData(lat, lon, beachName) {
-            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=wind_speed_10m,wind_direction_10m&wind_speed_unit=ms&timezone=Asia/Tokyo&forecast_days=3`;
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=wind_speed_10m,wind_direction_10m,temperature_2m,weather_code&wind_speed_unit=ms&timezone=Asia/Tokyo&forecast_days=3`;
             const response = await fetch(url);
             const data = await response.json();
             
@@ -1106,8 +1152,14 @@
                         const windColor = getWindColor(summary.avgSpeed);
                         const kiteStatus = getKiteFoilStatus(summary.avgSpeed);
                         const wingStatus = getWingFoilStatus(summary.avgSpeed);
+                        const weatherIcon = getWeatherIcon(summary.weatherCode);
+                        const tempDisplay = summary.avgTemp !== null ? Math.round(summary.avgTemp) + '°' : '-';
                         html += `
                             <div class="day-cell ${isSelected ? 'selected' : ''}" onclick="selectCell('${beach.name}', ${dayIndex}, '${date}')">
+                                <div class="weather-row">
+                                    <span class="weather-icon">${weatherIcon}</span>
+                                    <span class="weather-temp">${tempDisplay}</span>
+                                </div>
                                 <div class="cell-wind-display">
                                     <div class="cell-wind-arrow" style="transform: rotate(${summary.avgDir}deg); color: ${windColor}; text-shadow: 0 0 10px ${windColor}40;">↓</div>
                                     <div class="cell-wind-info">
